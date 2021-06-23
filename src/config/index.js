@@ -1,8 +1,6 @@
-module.exports = {
-    appName: 'Store Search',
-    port: 3000,
-    db: {
-        host: 'localhost',
-        dbName: 'storesearch'
-    }
-}
+export const appName = 'Store Search';
+export const port = 3000;
+export const db = {
+    host: 'localhost',
+    dbName: 'storesearch'
+};

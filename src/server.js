@@ -1,11 +1,19 @@
 // Imported modules
-const path = require('path');
-const express = require('express');
-const config = require('./config');
-const router = require('./routes');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const session = require('express-session');
+import path from 'path';
+import express from 'express';
+import {appName, port, db} from './config/index.js';
+import router from './routes/index.js';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import session from 'express-session';
+// const path = path();
+// const express = express();
+// const config = require('./config');
+// const router = require('./routes');
+// const bodyParser = require('body-parser');
+// const mongoose = require('mongoose');
+// const session = require('express-session');
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 mongoose.Promise = global.Promise;
 
@@ -43,14 +51,16 @@ app.use('/', router);
 
 
 // connect to the database
-mongoose.connect(`mongodb://${config.db.host}/${config.db.dbName}`, {useMongoClient: true});
+mongoose.connect(`mongodb://${db.host}/${db.dbName}`, {useMongoClient: true});
 
 //require the User model file
-require('./models/user.model.js');
+//require the User model file
+import User from './models/user.model.js';
+// import ('./models/user.model.js').default;
 
 
 
 // Start the server
-app.listen(config.port, function() {
-  console.log(`${config.appName} is listening on port ${config.port}`);
+app.listen(port, function() {
+  console.log(`${appName} is listening on port ${port}`);
 });

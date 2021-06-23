@@ -1,10 +1,13 @@
 // Create a router object to export to server.js
-const app = require('express');
-const router = require('express').Router();
-const mongoose = require('mongoose');
-const User = require('../models/user.model');
+import express from 'express';
+const router = express.Router();
+import pkg from 'mongoose';
+const { Types } = pkg;
+import User from '../models/user.model.js'
+// const User = require('../models/user.model');
 
-mongoose.Promise = global.Promise;
+
+const Promise = global.Promise;
 
 
 router.get('/home', function(req, res, next) {
@@ -152,7 +155,7 @@ router.put('/profile/:userId/list/:itemId', function(req, res, next) {
     let itemName = req.body.itemName;
     let itemId = req.params.itemId;
     let options = { new: false };
-    let itemIdObj = new mongoose.Types.ObjectId(itemId);
+    let itemIdObj = new Types.ObjectId(itemId);
 
     const itemObject = {
         itemName: itemName,
@@ -191,7 +194,7 @@ router.delete('/profile/:userId/list/:itemId', function(req, res, next) {
         safe: true,
         multi: false
     };
-    let itemIdObj = new mongoose.Types.ObjectId(itemId);
+    let itemIdObj = new Types.ObjectId(itemId);
 
     User.update({_id: userId}, { "$pull": { "groceryList" : { '_id': itemIdObj } }}, options, function(err, item) {
         if (err) {
@@ -220,4 +223,4 @@ router.get('/logout', function(req, res, next) {
     }
 });
 
-module.exports = router;
+export default router;

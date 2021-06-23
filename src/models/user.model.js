@@ -1,12 +1,13 @@
 // Load mongoose package
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+import pkg from 'mongoose';
+const { Schema, model } = pkg;
+import { compareSync, hash as _hash } from 'bcrypt';
 
 
-mongoose.Promise = global.Promise;
+const Promise = global.Promise;
 
 // Layout of User profile
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
     name: {
         type: String,
         requires: true,
@@ -40,7 +41,7 @@ const UserSchema = new mongoose.Schema({
 // authenticate input against database documents
 UserSchema.methods.authenticate = function(password) {
     let user = this;
-    return bcrypt.compareSync(password, user.password);
+    return compareSync(password, user.password);
         
 }
 
@@ -48,7 +49,7 @@ UserSchema.methods.authenticate = function(password) {
 UserSchema.pre('save', function(next) {
     let user = this;
     if (user.password) { 
-        bcrypt.hash(user.password, 10, function(err, hash) {
+        _hash(user.password, 10, function(err, hash) {
         if (err) {
             return next(err);
         }
@@ -61,5 +62,5 @@ UserSchema.pre('save', function(next) {
     }
 });
 
-const User = mongoose.model('User', UserSchema);
-module.exports = User;
+const User = model('User', UserSchema);
+export default User;
